@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery with Pagination</title>
+</head>
+<body>
+  <h1>Gallery with Pagination</h1>
+  <div id="images"></div>
+  <div id="pagination"></div>
+  <script>
+    const queryPage = new URLSearchParams(window.location.search).get('page') || 1;
+
+    function fetchImages(page) {
+      fetch(`/fetch-all-pagination/pages/${page}`)
+        .then(response => response.json())
+        .then(data => {
+          const container = document.getElementById('images');
+          const pagination = document.getElementById('pagination');
+          container.innerHTML = '';
+          pagination.innerHTML = '';
+
+          data.files.forEach(image => {
+            const img = document.createElement('img');
+            img.src = `/uploads/${image}`;
+            img.alt = 'Gallery Image';
+            container.appendChild(img);
+            img.style.width = '200px'; // Adjust image style if needed
+          });
+
+          for (let i = 1; i <= data.totalPages; i++) {
+            const pageLink = document.createElement('a');
+            pageLink.href = `?page=${i}`;
+            pageLink.innerText = i;
+            if (i == data.currentPage) {
+              pageLink.style.fontWeight = 'bold';
+            }
+            pagination.appendChild(pageLink);
+            pagination.appendChild(document.createTextNode(' '));
+          }
+        });
+    }
+
+    fetchImages(queryPage);
+  </script>
+</body>
+</html>

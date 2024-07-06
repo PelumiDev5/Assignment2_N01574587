@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery</title>
+</head>
+<body>
+  <h1>Gallery</h1>
+  <div id="images"></div>
+  <script>
+    fetch('/fetch-all')
+      .then(response => response.json())
+      .then(images => {
+        const container = document.getElementById('images');
+        images.forEach(image => {
+          const img = document.createElement('img');
+          img.src = `/uploads/${image}`;
+          img.alt = 'Gallery Image';
+          container.appendChild(img);
+          img.style.width = '300px'; // Adjust image style if needed
+        });
+      });
+  </script>
+</body>
+</html>
